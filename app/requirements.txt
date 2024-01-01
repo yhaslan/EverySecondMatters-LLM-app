@@ -1,0 +1,10 @@
+pandas
+numpy
+streamlit
+Pillow
+plotly
+transformers
+pickle
+scikit-learn==1.3.2
+googlemaps
+
