@@ -15,7 +15,7 @@ This is a Turkish language NLP project.
 
 ## Datasets
 
-The original dataset I used for this project was available on [kaggle]("https://www.kaggle.com/datasets/swaptr/turkey-earthquake-tweets") as csv file. It contains tweets on earthquake that hit Turkey and Syria on 6 February. The dataset includes the text of each tweet, the user profile information, the time and location of each tweet, and the number of likes, retweets, and replies for each tweet. The dataset also includes any hashtags, mentions, and links used in the tweets.
+The original dataset I used for this project was available on [kaggle](https://www.kaggle.com/datasets/swaptr/turkey-earthquake-tweets) as csv file. It contains tweets on earthquake that hit Turkey and Syria on 6 February. The dataset includes the text of each tweet, the user profile information, the time and location of each tweet, and the number of likes, retweets, and replies for each tweet. The dataset also includes any hashtags, mentions, and links used in the tweets.
 
 Since it contains over 400,000 tweets in more than 60 languages, I first filtered down the corpus to the Turkish language tweets. 
 
@@ -29,7 +29,7 @@ Since the original dataset is too big and the models I use are GPU-intensive, fo
 
 ## Doccano
 Doccano is an open source text annotation tool. It can be used to create labeled datasets for: Text classification, Entity extraction,  Sequence to sequence translation.
-For more information you can check its [tutorial]('https://doccano.github.io/doccano/tutorial/')
+For more information you can check its [tutorial](https://doccano.github.io/doccano/tutorial/)
 
 You can also have look at the snapshots in Doccano_task1_annotation.png and Doccano_task2_NER_annotation.png files to see how I annotated the tweets for Task 1 and Task 2 respectively.
 
@@ -63,7 +63,7 @@ and I finetuned one pre-trained transformers model (BERTÜRK).
 Since there is no real-time data feeding currently going on, the app is designed in way to show you a snapshot of how the map would have looked like on a selected date.
 
 ## Deployment
-- Because of the GPU requirements, the app is deployed on HuggingFace Spaces. [Click here]('https://huggingface.co/spaces/yhaslan/every_second_matters') to access to the app.
+- Because of the GPU requirements, the app is deployed on HuggingFace Spaces. [Click here](https://huggingface.co/spaces/yhaslan/every_second_matters) to access to the app.
 - Check out the Demo video of the app also in this repository: Demo_EverySecondMatters_App
-- You can also see the app's main repository [here]('https://huggingface.co/spaces/yhaslan/every_second_matters/tree/main')
-- You can also find my fine-tuned [tweet classification]('https://huggingface.co/yhaslan/berturk-earthquake-tweets-classification') and [NER]('https://huggingface.co/yhaslan/turkish-earthquake-tweets-ner') models on HuggingFace.
+- You can also see the app's main repository [here](https://huggingface.co/spaces/yhaslan/every_second_matters/tree/main)
+- You can also find my fine-tuned [tweet classification](https://huggingface.co/yhaslan/berturk-earthquake-tweets-classification) and [NER](https://huggingface.co/yhaslan/turkish-earthquake-tweets-ner) models on HuggingFace.
