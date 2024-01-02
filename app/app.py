@@ -258,7 +258,7 @@ emergency_tweets['Lat'] = np.zeros(len(emergency_tweets))
 emergency_tweets['Lon'] = np.zeros(len(emergency_tweets))
 
 ### Retrieveing latitudes and longtitudes
-gmaps = googlemaps.Client(key='AIzaSyACFrCjJtlpnu09ORLOCOxdU2v_EONZR3I')
+gmaps = googlemaps.Client(key='YOUR-API-KEY')
 
 for i in range(len(emergency_tweets)):
     if not pd.isnull(emergency_tweets.loc[i, 'FULL_ADDRESS']):
