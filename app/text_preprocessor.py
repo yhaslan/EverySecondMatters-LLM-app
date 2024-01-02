@@ -88,15 +88,16 @@ class CustomPreprocessor(BaseEstimator, TransformerMixin):
 
 
     def normalize_abbreviations(self, text):
+        text  = text.replace('k.maraş', 'Kahramanmaraş')
+        text  = text.replace('K.maraş', 'Kahramanmaraş')
+        text  = text.replace('K.Maraş', 'Kahramanmaraş')
+        text  = text.replace('k.maras', 'kahramanmaraş')
+        text  = text.replace('K.maras', 'Kahramanmaraş')
+        text  = text.replace('K.Maras', 'kahramanmaraş')
         for regex, replacement in self.abbreviations:
             text = re.sub(rf'\b{re.escape(regex)}\b', replacement, text)
             text  = re.sub(r'\s\s+', ' ',text )
-            text  = text.replace('k.maraş', 'Kahramanmaraş')
-            text  = text.replace('K.maraş', 'Kahramanmaraş')
-            text  = text.replace('K.Maraş', 'Kahramanmaraş')
-            text  = text.replace('k.maras', 'kahramanmaraş')
-            text  = text.replace('K.maras', 'Kahramanmaraş')
-            text  = text.replace('K.Maras', 'kahramanmaraş')
+          
         return text
 
 
