@@ -9,7 +9,7 @@ from text_preprocessor import CustomPreprocessor
 
 import numpy as np
 import torch
-from datetime import datetime
+import datetime as dt
 import googlemaps
 
 
@@ -124,8 +124,6 @@ with col2:
     """)
 
 
-
-
 st.header("Task 1: Binary Text Classification")
 st.markdown("Click the button below to print a random tweet from the dataset")
 
@@ -164,6 +162,8 @@ st.markdown("""
 
 tag_to_color = {'CITY': 'blue', 'ADDR': 'yellow', 'PER': 'red', 'OTHER': 'green'}
 
+
+
 st.header("Task 2: NER")
 st.markdown("Click the button below to print a random tweet from the dataset")
 if st.button('Print another random tweet'):
@@ -195,26 +195,28 @@ st.markdown("""
 """)
 
 st.header("Task 3: Geocoding and Visualization")
-st.markdown("Pick a date for which you would like to visuzalize the emergency call map")
+st.markdown("""Move the slider to pick a date for which you wish to visuzalize how the emergency call map would have looked
+    like.
+            """)
 
 data = random_data(2000)
-data['date'] = pd.to_datetime(data['date'])
 
-min_date = pd.Timestamp(data['date'].min()).timestamp()  # Get min_date as Unix timestamp
-max_date = pd.Timestamp(data['date'].max()).timestamp()  # Get max_date as Unix timestamp
+data['date'] = data['date'].astype(str)
+data['date'] = data['date'].apply(lambda x: dt.datetime.fromisoformat(x[:-6]))
+
 
 # Create a slider for selecting a date
-selected_date_unix = st.slider("Select a date", min_value=min_date, max_value=max_date)
+selected_date = st.slider("Select a date", 
+                                         min_value=data['date'].min().to_pydatetime(), 
+                                         max_value=data['date'].max().to_pydatetime(),
+                           format = "MMM-DD, HH:mm:ss")
 
-selected_date = datetime.utcfromtimestamp(selected_date_unix)
+
 
 # Display the selected date
-st.write("Selected Date:", selected_date)
+st.write("Selected DateTime:", selected_date)
 
-
-# Filter data based on the selected date (as Unix timestamp)
-filtered_data = data[data['date'].apply(lambda x: x.timestamp()) <= selected_date_unix]
-
+filtered_data = data[data['date'] <= selected_date]
 
 
 with open('text_preprocessor.pkl', 'rb') as f:
@@ -234,6 +236,7 @@ ner_preds = []
 for tweet in emergency_tweets['text'].tolist():
     ner_preds.append(ner(tweet))
 ner_preds = pd.Series(ner_preds)
+
 
 
 def create_entity_column(pred,entity_group):
@@ -257,8 +260,10 @@ for i in range(len(emergency_tweets)):
 emergency_tweets['Lat'] = np.zeros(len(emergency_tweets))
 emergency_tweets['Lon'] = np.zeros(len(emergency_tweets))
 
+
 ### Retrieveing latitudes and longtitudes
-gmaps = googlemaps.Client(key='YOUR-API-KEY')
+
+gmaps = googlemaps.Client(key= st.secrets["my_api_key"])
 
 for i in range(len(emergency_tweets)):
     if not pd.isnull(emergency_tweets.loc[i, 'FULL_ADDRESS']):
@@ -273,20 +278,18 @@ for i in range(len(emergency_tweets)):
 
 
 # Calculate the numerical representation of each date (days since the reference date)
-selected_date = pd.Timestamp(datetime.utcfromtimestamp(selected_date_unix), tz='UTC')
 
-emergency_tweets['how much time has passed (in minutes)'] = (selected_date - emergency_tweets['date']).dt.total_seconds() / 60
+emergency_tweets['how much time has passed (in hours)'] = (selected_date - emergency_tweets['date']).dt.total_seconds() / 3600
 
 emergency_tweets['tweet'] = emergency_tweets['text'].str.wrap(30)
 emergency_tweets['tweet'] = emergency_tweets['tweet'].apply(lambda x: x.replace('\n', '<br>'))
 
 fig = px.scatter_mapbox(emergency_tweets, lat="Lat", lon="Lon",
-                        #color_continuous_scale=px.colors.cyclical.IceFire_r,
                         color_continuous_scale="hot",
                          zoom=6, height=600,
                          hover_data = ["date", "tweet"],
                         hover_name="PERSON", 
-                        color = 'how much time has passed (in minutes)',  
+                        color = 'how much time has passed (in hours)',  
                         center = {'lat': 37 , 'lon':37},
                         )  
 fig.update_layout(mapbox_style="open-street-map")
